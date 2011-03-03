@@ -1,4 +1,30 @@
 #!/usr/bin/env ruby
 require 'cupdate'
+require 'optparse'
+
+# Parse command line parameters
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: cupdate [options]"
+  opts.separator ""
+  opts.separator "Specific options:"
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+  opts.on_tail("--version", "Show version") do
+    puts "0.1.0"
+    exit
+  end
+end
+
+opts.parse!(ARGV)
+
+# Check if we can find multimarkdown
+if not system("multimarkdown -h")
+  puts "Cannot find multimarkdown in path"
+  puts "Please go to http://fletcherpenny.net/multimarkdown/ to download"
+  exit
+end
 
 Cupdate.new().convert
+
