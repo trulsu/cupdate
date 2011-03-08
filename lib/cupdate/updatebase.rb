@@ -1,4 +1,4 @@
-#
+# Base class for converter class.
 #
 #
 require 'find'
@@ -7,21 +7,19 @@ require 'erubis'
 class UpdateBase
 	
 	def initialize
-		@header = read_template('header.erb')
-		@footer = read_template('footer.erb')
+		@template = read_template('template.erb')
 	end
 	
 protected
-	
-	def adjust_header(filename, title)
+
+  # Creates the full html document.
+  # Uses the filename path to determine css link path,
+  # and then fills in the ERB template.
+	def html_from_template(filename, title, html)
 		levels = filename.count("/") - 1
 		css_link = "./" + ("../" * levels) + "css/style.css"
-    @header.result(:title => title, :css_link => css_link)
+    @template.result(:title => title, :css_link => css_link, :content => html)
 	end
-
-  def adjust_footer
-    @footer.result()
-  end
 
 	def create_file_list(directory)
 		glob_pattern = "#{directory}/*"
@@ -29,14 +27,16 @@ protected
 	end
 	
 	def read_template(name)
-		template = File.read("./template/#{name}")
+    if File.exist? name
+		  template = File.read("#{name}")
+    else
+      template = DefaultTemplate.DEFAULT_TEMPLATE
+    end
 		Erubis::Eruby.new(template)
 	end
 	
-	def write_output_file(filename,html, title)
-		header = adjust_header(filename, title)
-    footer = adjust_footer
-		full_html = header + html + footer 
+	def write_output_file(filename, html, title)
+		full_html = html_from_template(filename, title, html) 
 		output = File.new(filename, 'w')
 		output.write full_html
 		output.close

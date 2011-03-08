@@ -19,6 +19,7 @@ The 'css' directory should contain a style.css file, which is linked from all th
 The template.erb is a template for all the html files and should contain the following tags:
 
   <%= title %>    - The title of the document (first main header in the markdown file)
+  <%= css_link %> - The css link tag
   <%= content %>  - The result from running multimarkdown on the file
 
 The result of the template file can contain plain html for marking the content.
