@@ -1,5 +1,25 @@
 cupdate
 
-Updates all files in html from the files in source.
-Also creates an index file for everything.
+The purpose of this script is to generate html from a number of multimarkdown files.
+
+The script expects the following directory structure:
+
+root\
+  source\
+  html\
+  css\
+  template.erb
+
+The 'source' directory contains multimarkdown files to be parsed.
+
+The 'html' directory is where the resulting html files are put.
+
+The 'css' directory should contain a style.css file, which is linked from all the html documents.
+
+The template.erb is a template for all the html files and should contain the following tags:
+
+  <%= title %>    - The title of the document (first main header in the markdown file)
+  <%= content %>  - The result from running multimarkdown on the file
+
+The result of the template file can contain plain html for marking the content.
 
